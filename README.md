@@ -1,3 +1,14 @@
+
+#### Change log
+Summary - Hello World with some extra info
+
+grabbed image.
+In terminal ran : cargo init hello_world
+Not using Copilot as no edu account. 
+Attempting to use AWS CodeWhisperer though also using rust-analyzer. Unsure how to tell which extension is doing what as I'm new.
+
+#### End Change log
+
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=665539593)
 
 # Rust template
