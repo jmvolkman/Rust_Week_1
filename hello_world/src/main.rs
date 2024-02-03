@@ -41,11 +41,19 @@ fn main() {
 
 let mut agemessage: String = "".to_string();
 
-    if age > 17 {
+if age > 19 {
+
+    agemessage.push_str(&age.to_string());
+    agemessage.push_str(" year old ");
+    agemessage.push_str(adult(gender));
+   
+
+}
+    if age > 12 {
 
         agemessage.push_str(&age.to_string());
         agemessage.push_str(" year old ");
-        agemessage.push_str(adult(gender));
+        agemessage.push_str(teen(gender));
        
 
     } else {
@@ -78,7 +86,16 @@ fn adult(gender: &str)
         "Human"
     }
 }
-
+fn teen(gender: &str) -> &'static str
+{
+    if gender.to_lowercase().starts_with("m") {
+        "Teenage Boy"
+    } else if gender.to_lowercase().starts_with("f")  {
+        "Teenage Girl"
+    } else {
+        "Teenager"
+    }
+}
 fn child(gender: &str) -> &'static str
 {
     if gender.to_lowercase().starts_with("m") {
