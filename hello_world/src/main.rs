@@ -1,7 +1,7 @@
 fn main() {
     println!("Hello, world!");
 
-    let mut x = 5;
+    let mut x: i32 = 5;
     println!("The value of x is: {}", x);
     x = 6;
     println!("The value of x is: {}", x);
@@ -27,5 +27,65 @@ fn main() {
     
     println!("The value of x is: {}", x);
     println!("The value of **y** is: **{}**", y);
-    
+
+    let bln_proceed = true;
+
+    if bln_proceed {
+        println!("Proceeding...");
+    } else {
+        println!("Not Proceeding...");
+    }
+
+    let gender: &str = "Male";
+    let age = 41;
+
+let mut agemessage: String = "".to_string();
+
+    if age > 17 {
+
+        agemessage.push_str(&age.to_string());
+        agemessage.push_str(" year old ");
+        agemessage.push_str(adult(gender));
+       
+
+    } else {
+        agemessage.push_str(&age.to_string());
+        agemessage.push_str(" year old ");
+        agemessage.push_str(child(gender));
+    }
+
+    println!("{}",agemessage);
+
+    let height = 179;
+    if height > 180 {
+        println!("Tall")
+    } else if height > 170 {
+        println!("Average")
+    } else {    
+        println!("Short")
+    }
+
+    //end of main
+    }
+
+fn adult(gender: &str)
+-> &'static str {
+    if gender.to_lowercase().starts_with("m") {
+        "Man"
+    } else if gender.to_lowercase().starts_with("f") {
+       "Woman"
+    } else {
+        "Human"
+    }
+}
+
+fn child(gender: &str) -> &'static str
+{
+    if gender.to_lowercase().starts_with("m") {
+        "Boy"
+    } else if gender.to_lowercase().starts_with("f")  {
+        "Girl"
+    } else {
+        "Child"
+    }
 }
