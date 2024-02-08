@@ -20,36 +20,42 @@ fn main() {
 //end of main
 }
 //sub functions to call
+fn input_number() -> i32 {
+    let mut input = String::new();
+    io::stdin().read_line(&mut input).expect("Error in reading.");
+    //input.trim().parse().expect("parse error")
+    let value = match input.trim().parse::<i32>() { 
+        Ok(n) => n,
+        Err(e) => panic!("Input not a number: {}", input), //-1,
+    };
+    value
+}
 fn arg_fn(){
     println!("Please enter number of elements to sum:");
-   
-    let mut input = String::new();
-    io::stdin().read_line(&mut input).expect("Failed to read input");
-
-    println!("Entered: {}", input);
-
-    let count:i32=  match input.parse::<i32>() {
-        Ok(n) => n,
-        Err(e) => -1,
-    };2
-
-    println!("Parsed: {}", input);
+    let count:i32 = input_number();
+    println!("Item Count: {}", count);
 
     let mut total = 0;
+    let mut items: Vec<i32> = Vec::new();
     if count > 0 {
         for int_loop in 1..=count {
             println!("Entry {}: ", int_loop);
-            io::stdin().read_line(&mut input).expect("Failed to read input");
-            total += input.parse::<i32>().unwrap();
+            let entry:i32 = input_number();
+            items.push(entry);
+            //io::stdin().read_line(&mut input).expect("Failed to read input");
+            println!("Entered: {}", entry);
+            total += entry;
         }
     }
      
     println!("The total is {}", total);
+    println!("The vector total is {}", sum(&items));
 
     // There are no variadic arguments in Rust
-    let numbers = [];
+    let numbers = [1,2,3,4];
     let result = sum(&numbers);
     println!("The sum is {}", result);
+
 }
 fn sum(numbers: &[i32]) -> i32 {
     let mut result = 0;
