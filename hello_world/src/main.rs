@@ -1,3 +1,5 @@
+
+use std::error;
 use std::vec;
 use std::io;
 
@@ -5,7 +7,8 @@ fn main() {
 
     println!("Hello, JMV!");
 
-    arg_fn();
+    borrow_main();
+    //arg_fn();
     //number_test();
     //condition();
     //array_test();
@@ -20,16 +23,93 @@ fn main() {
 //end of main
 }
 //sub functions to call
+
+fn borrow_main(){
+
+    // Borrowing is the mechanism by which Rust allows you to lend ownership of a variable to a function 
+    // or another part of your program without actually transferring ownership of the variable. 
+    // When you borrow a variable, you're essentially saying 
+    // "I want to use this variable for a little while, but I promise I won't modify it."
+
+    let mut my_vec = vec![1, 2, 3, 4, 5];
+    let my_int = 10;
+    let my_string = String::from("Hello, world!");
+    let mut my_string_mut = String::from("Hello, world!");
+
+    borrow_string_mut(&mut my_string_mut);
+    println!("Mutable string after borrow: {}", my_string_mut);
+
+    // this compiles no problem!
+    own_integer(my_int);
+    println!("{}", my_int);
+
+    borrow_string_nonmut(&my_string);
+    println!("Non-Mutable string after borrow: {}", my_string);
+
+    own_string(my_string); // take ownership of my_string
+    // this is using my_string which has also moved and is invalid
+    //println!("{:?}", my_string); // this will not compile!
+
+    borrow_vec(&my_vec);
+
+    own_vec(my_vec);
+    // but this is using my_vec which was borrowed (moved) and yet is now invalid
+    //println!("{:?}", my_vec); // this will not compile!
+
+    
+}
+// Borrowing is a key concept in Rust because it allows you to write code that is both safe and efficient. 
+// By lending ownership of a variable instead of transferring it, Rust ensures that only 
+// one part of your program can modify the variable at a time, which helps prevent 
+// bugs and makes it easier to reason about your code.
+fn borrow_vec(vector: &Vec<i32>) {
+    //vector.push(10);
+    println!("{:?}", vector);
+}
+fn own_vec(mut vector: Vec<i32>) {
+    vector.push(10);
+    println!("{:?}", vector);
+}
+fn own_integer(x: i32) {
+    let _ = x + 1;
+}
+#[allow(dead_code)]
+fn borrow_string_nonmut(s: &String) {
+    let s = String::from(format!("{} {}", s," appended"));
+    println!("{}", s);
+}
+#[allow(dead_code)]
+fn borrow_string_mut(s: &mut String) {
+    s.push_str(&" appended");
+    println!("{}", s);
+}
+#[allow(dead_code)]
+fn own_string(s: String) {
+    println!("{}", s);
+}
+
 fn input_number() -> i32 {
     let mut input = String::new();
     io::stdin().read_line(&mut input).expect("Error in reading.");
     //input.trim().parse().expect("parse error")
     let value = match input.trim().parse::<i32>() { 
         Ok(n) => n,
-        Err(e) => panic!("Input not a number: {}", input), //-1,
+        Err(error) => {
+            match error.kind() {
+                // Error::ParseInt(e) => e,
+
+                std::num::IntErrorKind::Empty => {panic!("Input not a number: {} - Empty Error: {}", input, error)}
+                std::num::IntErrorKind::InvalidDigit => {panic!("Input not a number: {} - Invalid Error: {}", input, error)}
+                std::num::IntErrorKind::PosOverflow => {panic!("Input not a number: {} - Large Error: {}", input, error)}
+                std::num::IntErrorKind::NegOverflow => {panic!("Input not a number: {} - Small Error: {}", input, error)}
+                std::num::IntErrorKind::Zero => {panic!("Input not a number: {} - Zero Error: {}", input, error)} 
+                _ => {panic!("Input not a number: {} - Error: {}", input, error)}
+            }
+        }
     };
     value
 }
+#[allow(dead_code)]
 fn arg_fn(){
     println!("Please enter number of elements to sum:");
     let count:i32 = input_number();
@@ -50,6 +130,7 @@ fn arg_fn(){
      
     println!("The total is {}", total);
     println!("The vector total is {}", sum(&items));
+    println!("The vector average is {}", average(&items));
 
     // There are no variadic arguments in Rust
     let numbers = [1,2,3,4];
@@ -63,6 +144,11 @@ fn sum(numbers: &[i32]) -> i32 {
         result += number;
     }
     result
+}
+#[allow(dead_code)]
+fn average(numbers: &[i32]) -> f64 {
+    let sum:i32= numbers.iter().sum();
+    f64::from(sum) / (numbers.len() as f64)
 }
 
 #[allow(dead_code)]
